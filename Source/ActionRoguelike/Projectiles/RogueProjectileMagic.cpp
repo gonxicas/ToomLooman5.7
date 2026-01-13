@@ -19,7 +19,7 @@ ARogueProjectileMagic::ARogueProjectileMagic()
 	LoopedNiagaraComponent->SetupAttachment(SphereComponent);
 	
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMoveComp");
-	ProjectileMovementComponent->InitialSpeed = 2000.f;
+	ProjectileMovementComponent->InitialSpeed = 1000.f;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
 }
 
@@ -28,6 +28,8 @@ void ARogueProjectileMagic::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	SphereComponent->OnComponentHit.AddDynamic(this, &ARogueProjectileMagic::OnActorHit);
+	
+	SphereComponent->IgnoreActorWhenMoving( GetInstigator(), true);
 }
 
 void ARogueProjectileMagic::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, 

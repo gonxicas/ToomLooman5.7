@@ -22,6 +22,11 @@ public:
 	ARogueCharacter();
 
 protected:
+	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAttack")
+	TSubclassOf<class ARogueProjectileMagic> ProjectileClass;
+
+	UPROPERTY(VisibleAnywhere, Category = "PrimaryAttack")
+	FName MuzzleSocketName;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> Inputs_Move;
@@ -29,6 +34,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> Inputs_Look;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> Inputs_PrimaryAttack;
 	
 	
 	UPROPERTY(VisibleAnywhere, Category = "Components")
@@ -43,6 +50,8 @@ protected:
 	void Move(const FInputActionValue& InValue);
 
 	void Look(const FInputActionInstance& InValue);
+	
+	void PrimaryAttack();
 
 public:
 	// Called every frame
