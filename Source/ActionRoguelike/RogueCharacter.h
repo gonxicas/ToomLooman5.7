@@ -64,8 +64,6 @@ protected:
 	
 	void PrimaryAttack();
 	
-	void CharacterJump();
-	
 	void AttackTimerElapsed();
 
 public:

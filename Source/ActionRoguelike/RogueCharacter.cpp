@@ -35,7 +35,7 @@ void ARogueCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	EnhancedInput->BindAction(Inputs_Look, ETriggerEvent::Triggered, this, &ARogueCharacter::Look);
 
 	EnhancedInput->BindAction(Inputs_PrimaryAttack, ETriggerEvent::Triggered, this, &ARogueCharacter::PrimaryAttack);
-	EnhancedInput->BindAction(Inputs_Jump, ETriggerEvent::Triggered, this, &ARogueCharacter::CharacterJump);
+	EnhancedInput->BindAction(Inputs_Jump, ETriggerEvent::Triggered, this, &ARogueCharacter::Jump);
 }
 
 void ARogueCharacter::Move(const FInputActionValue& InValue)
@@ -76,11 +76,6 @@ void ARogueCharacter::PrimaryAttack()
 	UGameplayStatics::PlaySound2D(this, CastingSound);
 
 	GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ARogueCharacter::AttackTimerElapsed, AttackDelayTime);
-}
-
-void ARogueCharacter::CharacterJump()
-{
-	Jump();
 }
 
 void ARogueCharacter::AttackTimerElapsed()
