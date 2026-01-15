@@ -10,8 +10,9 @@ ARogueExplosiveBarrel::ARogueExplosiveBarrel()
 	PrimaryActorTick.bCanEverTick = true;
 
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-	RootComponent = MeshComponent;
 	MeshComponent->SetSimulatePhysics(true);
+	MeshComponent->SetCollisionProfileName(TEXT("PhysicsActor"));
+	RootComponent = MeshComponent;
 
 	LoopedAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("LoopedAudioComp"));
 	LoopedAudioComponent->SetAutoActivate(false);
@@ -24,7 +25,9 @@ ARogueExplosiveBarrel::ARogueExplosiveBarrel()
 	RadialForceComponent = CreateDefaultSubobject<URadialForceComponent>(TEXT("RadialForceComp"));
 	RadialForceComponent->SetupAttachment(MeshComponent);
 	RadialForceComponent->Radius = 1000.f;
-	RadialForceComponent->ImpulseStrength = 2000.f;
+	RadialForceComponent->ImpulseStrength = 150000.f;
+	RadialForceComponent->bAutoActivate = false;
+	RadialForceComponent->bIgnoreOwningActor = false;
 }
 
 float ARogueExplosiveBarrel::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
@@ -43,7 +46,6 @@ float ARogueExplosiveBarrel::TakeDamage(float DamageAmount, struct FDamageEvent 
 void ARogueExplosiveBarrel::DestroyBarrel()
 {
 	LoopedAudioComponent->Stop();
-	LoopedAudioComponent->Deactivate();
 	LoopedNiagaraComponent->Deactivate();
 	
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ExplosionEffect, GetActorLocation()
