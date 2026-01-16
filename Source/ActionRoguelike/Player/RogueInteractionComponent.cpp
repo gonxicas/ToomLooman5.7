@@ -37,7 +37,7 @@ void URogueInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 		auto OverlapDirection = (OverlapLocation - Center).GetSafeNormal();
 
 
-		auto DotResult = FVector::DotProduct(OverlapDirection,
+		const auto DotResult = FVector::DotProduct(OverlapDirection,
 		                                     PlayerController->GetControlRotation().Vector());
 
 		auto DebugString = FString::Printf(TEXT("Dot: %f"), DotResult);
@@ -50,8 +50,7 @@ void URogueInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 		}
 	}
 	
-	if (BestActor)
-	{
-		DrawDebugBox(GetWorld(), BestActor->GetActorLocation(), FVector(100.0f), FColor::Green);
-	}
+	if (!BestActor) return;
+	 
+	DrawDebugBox(GetWorld(), BestActor->GetActorLocation(), FVector(100.0f), FColor::Green);
 }
