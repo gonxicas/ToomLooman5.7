@@ -1,5 +1,5 @@
 ﻿#include "RogueInteractionComponent.h"
-
+#include "RogueGameTypes.h"
 #include "Core/RogueInteractionInterface.h"
 #include "Engine/OverlapResult.h"
 
@@ -27,7 +27,7 @@ void URogueInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 
 	const auto Center = PlayerController->GetPawn()->GetActorLocation();
 
-	constexpr ECollisionChannel CollisionChannel = ECC_Visibility;
+	constexpr ECollisionChannel CollisionChannel = COLLISION_INTERACTION;
 
 	FCollisionShape Shape;
 	Shape.SetSphere(InteractionRadius);
