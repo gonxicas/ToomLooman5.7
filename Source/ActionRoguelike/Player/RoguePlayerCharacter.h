@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "RogueCharacter.generated.h"
+#include "RoguePlayerCharacter.generated.h"
 
 class UNiagaraSystem;
 struct FInputActionInstance;
@@ -14,12 +14,12 @@ class UAnimMontage;
 class USoundBase;
 
 UCLASS()
-class ACTIONROGUELIKE_API ARogueCharacter : public ACharacter
+class ACTIONROGUELIKE_API ARoguePlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
-	ARogueCharacter();
+	ARoguePlayerCharacter();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAttack")

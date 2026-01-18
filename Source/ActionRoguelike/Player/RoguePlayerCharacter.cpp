@@ -1,4 +1,4 @@
-﻿#include "RogueCharacter.h"
+﻿#include "RoguePlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
@@ -6,7 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Projectiles/RogueProjectileMagic.h"
 
-ARogueCharacter::ARogueCharacter()
+ARoguePlayerCharacter::ARoguePlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -20,25 +20,25 @@ ARogueCharacter::ARogueCharacter()
 	MuzzleSocketName = "Muzzle_01";
 }
 
-void ARogueCharacter::BeginPlay()
+void ARoguePlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-void ARogueCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ARoguePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 
-	EnhancedInput->BindAction(Inputs_Move, ETriggerEvent::Triggered, this, &ARogueCharacter::Move);
-	EnhancedInput->BindAction(Inputs_Look, ETriggerEvent::Triggered, this, &ARogueCharacter::Look);
+	EnhancedInput->BindAction(Inputs_Move, ETriggerEvent::Triggered, this, &ARoguePlayerCharacter::Move);
+	EnhancedInput->BindAction(Inputs_Look, ETriggerEvent::Triggered, this, &ARoguePlayerCharacter::Look);
 
-	EnhancedInput->BindAction(Inputs_PrimaryAttack, ETriggerEvent::Triggered, this, &ARogueCharacter::PrimaryAttack);
-	EnhancedInput->BindAction(Inputs_Jump, ETriggerEvent::Triggered, this, &ARogueCharacter::Jump);
+	EnhancedInput->BindAction(Inputs_PrimaryAttack, ETriggerEvent::Triggered, this, &ARoguePlayerCharacter::PrimaryAttack);
+	EnhancedInput->BindAction(Inputs_Jump, ETriggerEvent::Triggered, this, &ARoguePlayerCharacter::Jump);
 }
 
-void ARogueCharacter::Move(const FInputActionValue& InValue)
+void ARoguePlayerCharacter::Move(const FInputActionValue& InValue)
 {
 	const auto InputValue = InValue.Get<FVector2D>();
 
@@ -53,7 +53,7 @@ void ARogueCharacter::Move(const FInputActionValue& InValue)
 	AddMovementInput(RightDirection, InputValue.Y);
 }
 
-void ARogueCharacter::Look(const FInputActionInstance& InValue)
+void ARoguePlayerCharacter::Look(const FInputActionInstance& InValue)
 {
 	const auto InputValue = InValue.GetValue().Get<FVector2D>();
 
@@ -61,7 +61,7 @@ void ARogueCharacter::Look(const FInputActionInstance& InValue)
 	AddControllerYawInput(InputValue.X);
 }
 
-void ARogueCharacter::PrimaryAttack()
+void ARoguePlayerCharacter::PrimaryAttack()
 {
 	PlayAnimMontage(AttackMontage);
 
@@ -75,10 +75,10 @@ void ARogueCharacter::PrimaryAttack()
 	
 	UGameplayStatics::PlaySound2D(this, CastingSound);
 
-	GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ARogueCharacter::AttackTimerElapsed, AttackDelayTime);
+	GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ARoguePlayerCharacter::AttackTimerElapsed, AttackDelayTime);
 }
 
-void ARogueCharacter::AttackTimerElapsed()
+void ARoguePlayerCharacter::AttackTimerElapsed()
 {
 	auto SpawnLocation = GetMesh()->GetSocketLocation(MuzzleSocketName);;
 	auto SpawnRotation = GetControlRotation();
@@ -91,7 +91,7 @@ void ARogueCharacter::AttackTimerElapsed()
 	MoveIgnoreActorAdd(NewProjectile);
 }
 
-void ARogueCharacter::Tick(float DeltaTime)
+void ARoguePlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
