@@ -3,8 +3,8 @@
 ARogueItemChest::ARogueItemChest()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	PrimaryActorTick.SetTickFunctionEnable(false);
-
+	PrimaryActorTick.bStartWithTickEnabled = false;
+	
 	BaseMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BaseMeshComp"));
 	RootComponent = BaseMeshComponent;
 	
@@ -12,10 +12,8 @@ ARogueItemChest::ARogueItemChest()
 	LidMeshComponent->SetupAttachment(BaseMeshComponent);
 }
 
-void ARogueItemChest::BeginPlay()
+void ARogueItemChest::Interact()
 {
-	Super::BeginPlay();
-	
 	SetActorTickEnabled(true);
 }
 

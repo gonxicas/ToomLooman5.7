@@ -1,6 +1,6 @@
 ﻿#include "RogueGameMode.h"
 
-#include "ActionRoguelike/Player/RoguePlayerController.h"
+#include "Player/RoguePlayerController.h"
 
 ARogueGameMode::ARogueGameMode()
 {
