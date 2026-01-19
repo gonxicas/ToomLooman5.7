@@ -37,6 +37,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAttack")
 	TObjectPtr<USoundBase> CastingSound;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "SecondaryAttack")
+	TSubclassOf<class ARogueProjectile> ProjectileBlackHole;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> Inputs_Move;
 	
@@ -45,6 +48,9 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> Inputs_PrimaryAttack;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> Inputs_SecondaryAttack;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> Inputs_Jump;
@@ -64,7 +70,11 @@ protected:
 	
 	void PrimaryAttack();
 	
-	void AttackTimerElapsed();
+	void PrimaryAttackTimerElapsed();
+	
+	void SecondaryAttack();
+
+	void SecondaryAttackTimerElapsed();
 
 public:
 	virtual void Tick(float DeltaTime) override;

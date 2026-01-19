@@ -3,18 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "RogueProjectile.h"
 #include "RogueProjectileMagic.generated.h"
 
 class UNiagaraSystem;
-class UProjectileMovementComponent;
-class USphereComponent;
-class UNiagaraComponent;
-class UAudioComponent;
 class USoundBase;
 
 UCLASS(Abstract)
-class ACTIONROGUELIKE_API ARogueProjectileMagic : public AActor
+class ACTIONROGUELIKE_API ARogueProjectileMagic : public ARogueProjectile
 {
 	GENERATED_BODY()
 
@@ -28,25 +24,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Sound")
 	TObjectPtr<USoundBase> ExplosionSound;
 	
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	TObjectPtr<USphereComponent> SphereComponent;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	TObjectPtr<UNiagaraComponent> LoopedNiagaraComponent;
 	
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	TObjectPtr<UAudioComponent> LoopedAudioComponent;
-	
-	
-	UFUNCTION()
-	void OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	                FVector NormalImpulse, const FHitResult& Hit );
+	virtual void OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	                FVector NormalImpulse, const FHitResult& Hit ) override;
 
 public:
-	virtual void PostInitializeComponents() override;
 	
 	ARogueProjectileMagic();
 };
