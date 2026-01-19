@@ -23,7 +23,7 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAttack")
-	TSubclassOf<class ARogueProjectileMagic> ProjectileClass;
+	TSubclassOf<class ARogueProjectile> ProjectileClass;
 
 	UPROPERTY(VisibleAnywhere, Category = "PrimaryAttack")
 	FName MuzzleSocketName;
@@ -36,11 +36,16 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAttack")
 	TObjectPtr<USoundBase> CastingSound;
+
+	
+	UPROPERTY(EditDefaultsOnly, Category = "UltimateAttack")
+	TSubclassOf<class ARogueProjectile> ProjectileTeleport;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "SecondaryAttack")
 	TSubclassOf<class ARogueProjectile> ProjectileBlackHole;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
+
+	UPROPERTY
+	(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> Inputs_Move;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
@@ -51,6 +56,9 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> Inputs_SecondaryAttack;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> Inputs_UltimateAttack;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> Inputs_Jump;
@@ -75,8 +83,10 @@ protected:
 	void SecondaryAttack();
 
 	void SecondaryAttackTimerElapsed();
+	void UltimateAttack();
 
 public:
+	void UltimateAttackTimerElapsed();
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

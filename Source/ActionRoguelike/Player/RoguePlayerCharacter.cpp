@@ -36,6 +36,7 @@ void ARoguePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 	EnhancedInput->BindAction(Inputs_PrimaryAttack, ETriggerEvent::Triggered, this, &ARoguePlayerCharacter::PrimaryAttack);
 	EnhancedInput->BindAction(Inputs_SecondaryAttack, ETriggerEvent::Triggered, this, &ARoguePlayerCharacter::SecondaryAttack);
+	EnhancedInput->BindAction(Inputs_UltimateAttack, ETriggerEvent::Triggered, this, &ARoguePlayerCharacter::UltimateAttack);
 	EnhancedInput->BindAction(Inputs_Jump, ETriggerEvent::Triggered, this, &ARoguePlayerCharacter::Jump);
 }
 
@@ -116,6 +117,36 @@ void ARoguePlayerCharacter::SecondaryAttackTimerElapsed()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	auto NewProjectile = GetWorld()->SpawnActor<AActor>(ProjectileBlackHole, SpawnLocation, SpawnRotation, SpawnParams);
+	
+	MoveIgnoreActorAdd(NewProjectile);
+}
+
+void ARoguePlayerCharacter::UltimateAttack()
+{
+	PlayAnimMontage(AttackMontage);
+
+	FTimerHandle AttackTimerHandle;
+
+	constexpr auto AttackDelayTime = 0.2f;
+
+	UNiagaraFunctionLibrary::SpawnSystemAttached(CastingEffect, GetMesh(), MuzzleSocketName,
+												 FVector::ZeroVector, FRotator::ZeroRotator,
+												 EAttachLocation::SnapToTarget, true);
+	
+	UGameplayStatics::PlaySound2D(this, CastingSound);
+
+	GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ARoguePlayerCharacter::UltimateAttackTimerElapsed, AttackDelayTime);
+}
+
+void ARoguePlayerCharacter::UltimateAttackTimerElapsed()
+{
+	auto SpawnLocation = GetMesh()->GetSocketLocation(MuzzleSocketName);;
+	auto SpawnRotation = GetControlRotation();
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Instigator = this;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	auto NewProjectile = GetWorld()->SpawnActor<AActor>(ProjectileTeleport, SpawnLocation, SpawnRotation, SpawnParams);
 	
 	MoveIgnoreActorAdd(NewProjectile);
 }

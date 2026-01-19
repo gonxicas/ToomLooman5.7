@@ -18,6 +18,7 @@ ARogueProjectile::ARogueProjectile()
 	ProjectileMovementComponent->InitialSpeed = 1000.f;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
 	
+	
 	LoopedNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("LoopedNiagaraComp"));
 	LoopedNiagaraComponent->SetupAttachment(SphereComponent);
 
