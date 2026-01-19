@@ -45,7 +45,8 @@ protected:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
 	                        class AController* EventInstigator, AActor* DamageCauser) override;
 	
-	virtual void DestroyBarrel();
+	UFUNCTION(BlueprintCallable)
+	void Explode();
 
 public:
 	virtual void Tick(float DeltaTime) override;

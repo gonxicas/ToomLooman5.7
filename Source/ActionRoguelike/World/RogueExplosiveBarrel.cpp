@@ -38,15 +38,18 @@ float ARogueExplosiveBarrel::TakeDamage(float DamageAmount, struct FDamageEvent 
 	LoopedNiagaraComponent->Activate();
 
 	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ARogueExplosiveBarrel::DestroyBarrel, DestroyDelayTime);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ARogueExplosiveBarrel::Explode, DestroyDelayTime);
 	SetCanBeDamaged(false);
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
-void ARogueExplosiveBarrel::DestroyBarrel()
+void ARogueExplosiveBarrel::Explode()
 {
 	LoopedAudioComponent->Stop();
 	LoopedNiagaraComponent->Deactivate();
+	
+	MeshComponent->AddImpulse(FVector::UpVector * 1000, NAME_None, true);
+	MeshComponent->AddAngularImpulseInDegrees(FVector::RightVector * 1000, NAME_None, true);
 	
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ExplosionEffect, GetActorLocation()
 	                                               , FRotator::ZeroRotator);
