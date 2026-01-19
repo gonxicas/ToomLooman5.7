@@ -10,12 +10,15 @@ URogueInteractionComponent::URogueInteractionComponent()
 
 void URogueInteractionComponent::Interact()
 {
-	const auto InteractInterface = Cast<IRogueInteractionInterface>(SelectedActor);
+	/*const auto InteractInterface = Cast<IRogueInteractionInterface>(SelectedActor);
 	
 	
 	if (!InteractInterface) return;
 	
-	InteractInterface->Interact();
+	InteractInterface->Execute_Interact(this);*/
+	if (!SelectedActor) return;
+	IRogueInteractionInterface::Execute_Interact(SelectedActor);
+	
 }
 
 void URogueInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,

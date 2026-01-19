@@ -34,7 +34,7 @@ protected:
 	
 public:
 
-	virtual void Interact() override;
+	virtual void Interact_Implementation() override;
 	
 	virtual void Tick(float DeltaTime) override;
 

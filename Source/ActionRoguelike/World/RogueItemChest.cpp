@@ -14,7 +14,7 @@ ARogueItemChest::ARogueItemChest()
 	LidMeshComponent->SetupAttachment(BaseMeshComponent);
 }
 
-void ARogueItemChest::Interact()
+void ARogueItemChest::Interact_Implementation()
 {
 	SetActorTickEnabled(true);
 }
