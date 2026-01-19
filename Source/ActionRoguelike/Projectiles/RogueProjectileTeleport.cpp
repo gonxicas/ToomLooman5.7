@@ -3,7 +3,8 @@
 
 #include "RogueProjectileTeleport.h"
 
-#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+#include "Components/AudioComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 
@@ -15,29 +16,37 @@ void ARogueProjectileTeleport::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	GetWorldTimerManager().SetTimer(ExplodeTimerHandle, this, &ARogueProjectileTeleport::Explode, DestroyDelayTime);
+	GetWorldTimerManager().SetTimer(ExplodeTimerHandle, this, &ARogueProjectileTeleport::StartDelayedTeleport, DestroyDelayTime);
 	
 }
 
-void ARogueProjectileTeleport::Explode()
+void ARogueProjectileTeleport::StartDelayedTeleport()
 {
-	FTimerHandle TimerHandle;
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ExplosionEffect, GetActorLocation());
+	TriggerExplosionEffects();
+	
 	ProjectileMovementComponent->StopMovementImmediately();
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ARogueProjectileTeleport::ExplodeElapsed, DestroyDelayTime);
+	LoopedAudioComponent->Stop();
+	LoopedNiagaraComponent->Deactivate();
+	SetActorEnableCollision(false);
+	
+	GetWorldTimerManager().SetTimer(ExplodeTimerHandle, this, &ARogueProjectileTeleport::HandleTeleport, TeleportSecondaryDelayTime);
 }
 
-void ARogueProjectileTeleport::ExplodeElapsed()
+void ARogueProjectileTeleport::HandleTeleport()
 {
+	const auto ActorToTeleport = GetInstigator();
 	
-	GetInstigator()->TeleportTo(GetActorLocation(), GetInstigator()->GetActorRotation());
+	check(ActorToTeleport);
+	
+	ActorToTeleport->TeleportTo(GetActorLocation(), ActorToTeleport->GetActorRotation());
+	
 	Destroy();
 }
 
 void ARogueProjectileTeleport::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 									   UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	ExplodeTimerHandle.Invalidate();
-	Explode();
+	GetWorldTimerManager().ClearTimer(ExplodeTimerHandle);
+	StartDelayedTeleport();
 }
 

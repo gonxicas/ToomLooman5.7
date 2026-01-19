@@ -1,9 +1,11 @@
 ﻿#include "RogueProjectile.h"
 
 #include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 ARogueProjectile::ARogueProjectile()
 {
@@ -35,9 +37,18 @@ void ARogueProjectile::PostInitializeComponents()
 	SphereComponent->IgnoreActorWhenMoving(GetInstigator(), true);
 }
 
-void ARogueProjectile::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
-									   UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void ARogueProjectile::TriggerExplosionEffects() const
 {
-	
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ExplosionEffect, GetActorLocation());
+
+	UGameplayStatics::PlaySoundAtLocation(this, ExplosionSound, GetActorLocation(),
+	                                      FRotator::ZeroRotator);
+}
+
+void ARogueProjectile::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
+                                  UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	TriggerExplosionEffects();
+	Destroy();
 }
 

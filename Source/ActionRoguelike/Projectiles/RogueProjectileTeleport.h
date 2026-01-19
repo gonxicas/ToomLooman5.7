@@ -16,12 +16,9 @@ class ACTIONROGUELIKE_API ARogueProjectileTeleport : public ARogueProjectile
 
 protected:
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Effects")
-	TObjectPtr<UNiagaraSystem> ExplosionEffect;
-	
 	virtual void BeginPlay() override;
-	void Explode();
-	void ExplodeElapsed();
+	void StartDelayedTeleport();
+	void HandleTeleport();
 	virtual void OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	                FVector NormalImpulse, const FHitResult& Hit) override;
 
@@ -29,6 +26,9 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Teleport")
 	float DestroyDelayTime = 0.2f;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Teleport")
+	float TeleportSecondaryDelayTime = 0.2f;
 	
 	
 public:

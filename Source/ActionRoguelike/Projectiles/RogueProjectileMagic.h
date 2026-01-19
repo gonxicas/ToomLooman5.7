@@ -6,9 +6,6 @@
 #include "RogueProjectile.h"
 #include "RogueProjectileMagic.generated.h"
 
-class UNiagaraSystem;
-class USoundBase;
-
 UCLASS(Abstract)
 class ACTIONROGUELIKE_API ARogueProjectileMagic : public ARogueProjectile
 {
@@ -18,11 +15,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	TSubclassOf<UDamageType> DmgTypeClass;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Effects")
-	TObjectPtr<UNiagaraSystem> ExplosionEffect;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-	TObjectPtr<USoundBase> ExplosionSound;
 	
 	
 	virtual void OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,

@@ -23,7 +23,7 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAttack")
-	TSubclassOf<class ARogueProjectile> ProjectileClass;
+	TSubclassOf<class ARogueProjectile> ProjectileMagic;
 
 	UPROPERTY(VisibleAnywhere, Category = "PrimaryAttack")
 	FName MuzzleSocketName;
@@ -75,18 +75,10 @@ protected:
 	void Move(const FInputActionValue& InValue);
 
 	void Look(const FInputActionInstance& InValue);
-	
-	void PrimaryAttack();
-	
-	void PrimaryAttackTimerElapsed();
-	
-	void SecondaryAttack();
-
-	void SecondaryAttackTimerElapsed();
-	void UltimateAttack();
+	void AttackTimerElapsed(TSubclassOf<ARogueProjectile> ProjectileClass);
+	void StartProjectileAttack(TSubclassOf<ARogueProjectile> ProjectileClass);
 
 public:
-	void UltimateAttackTimerElapsed();
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

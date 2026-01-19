@@ -4,6 +4,8 @@
 #include "GameFramework/Actor.h"
 #include "RogueProjectile.generated.h"
 
+class UNiagaraSystem;
+class USoundBase;
 class UProjectileMovementComponent;
 class USphereComponent;
 class UNiagaraComponent;
@@ -28,9 +30,18 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UAudioComponent> LoopedAudioComponent;
 	
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	TObjectPtr<UNiagaraSystem> ExplosionEffect;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+	TObjectPtr<USoundBase> ExplosionSound;
+	
 	UFUNCTION()
 	virtual void OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 					FVector NormalImpulse, const FHitResult& Hit );
+
+	void TriggerExplosionEffects() const;
 
 public:
 	ARogueProjectile();

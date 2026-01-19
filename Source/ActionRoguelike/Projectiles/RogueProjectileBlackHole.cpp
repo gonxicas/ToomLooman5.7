@@ -1,6 +1,7 @@
 ﻿#include "RogueProjectileBlackHole.h"
 
 #include "Components/SphereComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "PhysicsEngine/RadialForceComponent.h"
 
 
@@ -14,7 +15,10 @@ ARogueProjectileBlackHole::ARogueProjectileBlackHole()
 	RadialForceComponent->ForceStrength = -150000000.f;
 	RadialForceComponent->bAutoActivate = true;
 	RadialForceComponent->bIgnoreOwningActor = true;
+	SphereComponent->SetSphereRadius(20.f);
+	RadialForceComponent->RemoveObjectTypeToAffect(UEngineTypes::ConvertToObjectType(ECC_Pawn));
 	SphereComponent->SetCollisionProfileName(TEXT("BlackHole"));
+	ProjectileMovementComponent->InitialSpeed = 5000.f;
 }
 
 void ARogueProjectileBlackHole::PostInitializeComponents()
@@ -48,5 +52,7 @@ void ARogueProjectileBlackHole::OnActorOverlap(UPrimitiveComponent* OverlappedCo
                                                UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
                                                const FHitResult& SweepResult)
 {
+	if (!OtherComp->IsSimulatingPhysics()) return;
+	
 	OtherActor->Destroy();
 }
