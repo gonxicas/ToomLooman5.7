@@ -64,6 +64,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> Inputs_Jump;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Death")
+	TObjectPtr<UAnimMontage> DeathMontage;
 	
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UCameraComponent> CameraComponent;
@@ -73,19 +75,18 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<URogueActionSystemComponent> ActionSystemComponent;
-	
-	virtual void BeginPlay() override;
-
 	void Move(const FInputActionValue& InValue);
 
 	void Look(const FInputActionInstance& InValue);
 	void AttackTimerElapsed(TSubclassOf<ARogueProjectile> ProjectileClass);
 	void StartProjectileAttack(TSubclassOf<ARogueProjectile> ProjectileClass);
 
+	UFUNCTION()
+	void OnHealthChanged(float NewHealth, float OldHealth);
 public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	
-	virtual void Tick(float DeltaTime) override;
+	virtual void PostInitializeComponents() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };

@@ -4,6 +4,7 @@
 #include "EnhancedInputComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "ActionSystem/RogueActionSystemComponent.h"
+#include "GameFramework/PawnMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Projectiles/RogueProjectileMagic.h"
 
@@ -23,9 +24,12 @@ ARoguePlayerCharacter::ARoguePlayerCharacter()
 	MuzzleSocketName = "Muzzle_01";
 }
 
-void ARoguePlayerCharacter::BeginPlay()
+
+void ARoguePlayerCharacter::PostInitializeComponents()
 {
-	Super::BeginPlay();
+	Super::PostInitializeComponents();
+	
+	ActionSystemComponent->OnHealthChanged.AddDynamic(this, &ARoguePlayerCharacter::OnHealthChanged);
 }
 
 void ARoguePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -84,8 +88,20 @@ void ARoguePlayerCharacter::StartProjectileAttack(TSubclassOf<ARogueProjectile> 
 	GetWorldTimerManager().SetTimer(AttackTimerHandle, Delegate,  AttackDelayTime, false);
 }
 
+void ARoguePlayerCharacter::OnHealthChanged(float NewHealth, float OldHealth)
+{
+	if (!FMath::IsNearlyZero(NewHealth)) return;
+	
+	DisableInput(nullptr);
+	
+	GetMovementComponent()->StopMovementImmediately();
+	
+	PlayAnimMontage(DeathMontage);
+	
+}
+
 float ARoguePlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
-	class AController* EventInstigator, AActor* DamageCauser)
+                                        class AController* EventInstigator, AActor* DamageCauser)
 {
 	auto ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
@@ -93,6 +109,7 @@ float ARoguePlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent 
 	
 	return ActualDamage;
 }
+
 
 void ARoguePlayerCharacter::AttackTimerElapsed(TSubclassOf<ARogueProjectile> ProjectileClass)
 {
@@ -105,9 +122,4 @@ void ARoguePlayerCharacter::AttackTimerElapsed(TSubclassOf<ARogueProjectile> Pro
 	auto NewProjectile = GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
 	
 	MoveIgnoreActorAdd(NewProjectile);
-}
-
-void ARoguePlayerCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }
