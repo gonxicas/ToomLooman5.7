@@ -3,6 +3,11 @@
 #include "Core/RogueInteractionInterface.h"
 #include "Engine/OverlapResult.h"
 
+TAutoConsoleVariable<bool> CVarInteractionDebugDrawing(TEXT("game.interaction.DebugDraw"), false,
+                                                       TEXT(
+	                                                       "Enables interaction component debug rendering. (0 = off, 1 = enabled)"),
+                                                       ECVF_Cheat);
+
 URogueInteractionComponent::URogueInteractionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -18,7 +23,6 @@ void URogueInteractionComponent::Interact()
 	InteractInterface->Execute_Interact(this);*/
 	if (!SelectedActor) return;
 	IRogueInteractionInterface::Execute_Interact(SelectedActor);
-	
 }
 
 void URogueInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -40,28 +44,34 @@ void URogueInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 
 	AActor* BestActor = nullptr;
 	float HighestDotResult = -1.f;
-	
+
+	auto bEnableDebugDraw = CVarInteractionDebugDrawing.GetValueOnGameThread();
+
 	for (const auto& Overlap : Overlaps)
 	{
 		auto OverlapLocation = Overlap.GetActor()->GetActorLocation();
 		auto OverlapDirection = (OverlapLocation - Center).GetSafeNormal();
-		
+
 		const auto DotResult = FVector::DotProduct(OverlapDirection,
-		                                     PlayerController->GetControlRotation().Vector());
+												   PlayerController->GetControlRotation().Vector());
 		if (DotResult > HighestDotResult)
 		{
 			BestActor = Overlap.GetActor();
 			HighestDotResult = DotResult;
 		}
-		
-		DrawDebugBox(GetWorld(), OverlapLocation, FVector(50.0f), FColor::Red);
-		auto DebugString = FString::Printf(TEXT("Dot: %f"), DotResult);
-		DrawDebugString(GetWorld(), OverlapLocation, DebugString, nullptr, FColor::Yellow, false, 0.f, true);
+		if (bEnableDebugDraw)
+		{
+			DrawDebugBox(GetWorld(), OverlapLocation, FVector(50.0f), FColor::Red);
+			auto DebugString = FString::Printf(TEXT("Dot: %f"), DotResult);
+			DrawDebugString(GetWorld(), OverlapLocation, DebugString, nullptr, FColor::Yellow, false, 0.f, true);
+		}
 	}
-	
+
+	if (!bEnableDebugDraw) return;
 	DrawDebugSphere(GetWorld(), Center, InteractionRadius, 32, FColor::White);
+
 	SelectedActor = BestActor;
-	if (!SelectedActor) return;
+	if (!SelectedActor) return
+
 	DrawDebugBox(GetWorld(), SelectedActor->GetActorLocation(), FVector(100.0f), FColor::Green);
-	
 }
