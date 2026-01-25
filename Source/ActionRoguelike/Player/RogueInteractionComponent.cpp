@@ -80,11 +80,11 @@ void URogueInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 			DrawDebugString(GetWorld(), Origin, DebugString, nullptr, FColor::Yellow, false, 0.f, true);
 		}
 	}
+	SelectedActor = BestActor;
 
 	if (!bEnableDebugDraw) return;
 	DrawDebugSphere(GetWorld(), Center, InteractionRadius, 32, FColor::White);
 
-	SelectedActor = BestActor;
 	if (!SelectedActor) return;
 
 	DrawDebugBox(GetWorld(), SelectedActor->GetActorLocation(), FVector(100.0f), FColor::Green);
