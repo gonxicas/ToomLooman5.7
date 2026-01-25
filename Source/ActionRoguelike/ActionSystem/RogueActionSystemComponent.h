@@ -34,6 +34,8 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnHealthChanged OnHealthChanged;
 	
+	bool IsMaxHealth() const;
+	
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Attributes")
 	FRogueAttributeSet Attributes;

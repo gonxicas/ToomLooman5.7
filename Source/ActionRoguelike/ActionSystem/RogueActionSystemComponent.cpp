@@ -20,3 +20,8 @@ void URogueActionSystemComponent::ApplyHealthChange(const float InValueAmount)
 	OnHealthChanged.Broadcast(Attributes.Health, OldHealth);
 }
 
+bool URogueActionSystemComponent::IsMaxHealth() const
+{
+	return FMath::IsNearlyEqual(Attributes.Health, Attributes.MaxHealth);
+}
+
