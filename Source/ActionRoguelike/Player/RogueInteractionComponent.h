@@ -12,8 +12,15 @@ class ACTIONROGUELIKE_API URogueInteractionComponent : public UActorComponent
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Interaction")
-	float InteractionRadius = 800.0f;
+	float InteractionRadius = 800.f;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Interaction")
+	float DistanceToWeightScale = 2.f;
+	UPROPERTY(EditDefaultsOnly, Category = "Interaction")
+	float DirectionWeightScale = 1.f;
 
+	
+	
 	UPROPERTY()
 	TObjectPtr<AActor> SelectedActor;
 	
