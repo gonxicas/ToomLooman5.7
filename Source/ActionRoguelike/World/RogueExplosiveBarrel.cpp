@@ -12,7 +12,9 @@ ARogueExplosiveBarrel::ARogueExplosiveBarrel()
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	MeshComponent->SetSimulatePhysics(true);
 	MeshComponent->SetCollisionProfileName(TEXT("PhysicsActor"));
+	MeshComponent->SetCanEverAffectNavigation(false);
 	RootComponent = MeshComponent;
+	
 
 	LoopedAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("LoopedAudioComp"));
 	LoopedAudioComponent->SetAutoActivate(false);
