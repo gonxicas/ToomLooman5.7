@@ -20,4 +20,6 @@ class ACTIONROGUELIKE_API URogueBTService_CheckRangeTo : public UBTService
 
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 	
+	URogueBTService_CheckRangeTo();
+	
 };

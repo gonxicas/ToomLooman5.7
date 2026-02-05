@@ -24,4 +24,6 @@ class ACTIONROGUELIKE_API URogueBTTask_RangedAttack : public UBTTaskNode
 	
 	UPROPERTY(EditAnywhere, Category = "AI")
 	float MaxBulletSpread = 5.f;
+	
+	URogueBTTask_RangedAttack();
 };
