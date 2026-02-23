@@ -25,3 +25,8 @@ bool URogueActionSystemComponent::IsMaxHealth() const
 	return FMath::IsNearlyEqual(Attributes.Health, Attributes.MaxHealth);
 }
 
+float URogueActionSystemComponent::GetHealthPercent() const
+{
+	return Attributes.Health / Attributes.MaxHealth;
+}
+

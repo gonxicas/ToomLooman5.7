@@ -35,6 +35,7 @@ public:
 	FOnHealthChanged OnHealthChanged;
 	
 	bool IsMaxHealth() const;
+	float GetHealthPercent() const;
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Attributes")
