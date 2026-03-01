@@ -48,12 +48,17 @@ void ARoguePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	EnhancedInput->BindAction(Inputs_Look, ETriggerEvent::Triggered, this, &ARoguePlayerCharacter::Look);
 
 	EnhancedInput->BindAction(Inputs_PrimaryAttack, ETriggerEvent::Triggered, this,
-	                          &ARoguePlayerCharacter::StartProjectileAttack, ProjectileMagic);
+	                          &ARoguePlayerCharacter::StartAction, FName("PrimaryAttack"));
 	EnhancedInput->BindAction(Inputs_SecondaryAttack, ETriggerEvent::Triggered, this,
 	                          &ARoguePlayerCharacter::StartProjectileAttack, ProjectileBlackHole);
 	EnhancedInput->BindAction(Inputs_UltimateAttack, ETriggerEvent::Triggered, this,
 	                          &ARoguePlayerCharacter::StartProjectileAttack, ProjectileTeleport);
 	EnhancedInput->BindAction(Inputs_Jump, ETriggerEvent::Triggered, this, &ARoguePlayerCharacter::Jump);
+}
+
+void ARoguePlayerCharacter::StartAction(FName InActionName)
+{
+	ActionSystemComponent->StartAction(InActionName);
 }
 
 void ARoguePlayerCharacter::Move(const FInputActionValue& InValue)

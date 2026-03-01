@@ -75,6 +75,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<URogueActionSystemComponent> ActionSystemComponent;
+	
+	void StartAction(FName InActionName);
+	
 	void Move(const FInputActionValue& InValue);
 
 	void Look(const FInputActionInstance& InValue);
