@@ -4,6 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "RogueActionSystemComponent.generated.h"
 
+struct FGameplayTag;
 class URogueAction;
 
 USTRUCT(BlueprintType)
@@ -31,8 +32,8 @@ class ACTIONROGUELIKE_API URogueActionSystemComponent : public UActorComponent
 
 	
 public:
-	void StartAction(FName InActionName);
-	void StopAction(FName InActionName);
+	void StartAction(FGameplayTag InActionName);
+	void StopAction(FGameplayTag InActionName);
 	
 	void ApplyHealthChange(float InValueAmount);
 	

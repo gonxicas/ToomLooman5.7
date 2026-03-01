@@ -6,13 +6,13 @@ void URogueAction::StartAction_Implementation()
 {
 	bIsRunning = true;
 	float WorldTime = GetWorld()->TimeSeconds;
-	UE_LOGFMT(LogTemp, Log, "Started Action {ActionName} - {WorldTime}", ("ActionName", ActionName), ("WorldTime", WorldTime));
+	UE_LOGFMT(LogTemp, Log, "Started Action {ActionName} - {WorldTime}", ("ActionName", ActionName.ToString()), ("WorldTime", WorldTime));
 }
 void URogueAction::StopAction_Implementation()
 {
 	bIsRunning = false;
 	float WorldTime = GetWorld()->TimeSeconds;
-	UE_LOGFMT(LogTemp, Log, "Stopped Action {ActionName} - {WorldTime}", ("ActionName", ActionName), ("WorldTime", WorldTime));
+	UE_LOGFMT(LogTemp, Log, "Stopped Action {ActionName} - {WorldTime}", ("ActionName", ActionName.ToString()), ("WorldTime", WorldTime));
 
 	CoolDownUntil = GetWorld()->TimeSeconds + CooldownTime;
 }

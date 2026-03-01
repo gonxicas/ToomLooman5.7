@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "RoguePlayerCharacter.generated.h"
 
+struct FGameplayTag;
 class URogueActionSystemComponent;
 struct FInputActionInstance;
 struct FInputActionValue;
@@ -55,9 +56,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<URogueActionSystemComponent> ActionSystemComponent;
 	
-	void StartAction(FName InActionName);
+	void StartAction(FGameplayTag InActionName);
 	
-	void StopAction(FName InActionName);
+	void StopAction(FGameplayTag InActionName);
 	
 	void Move(const FInputActionValue& InValue);
 
