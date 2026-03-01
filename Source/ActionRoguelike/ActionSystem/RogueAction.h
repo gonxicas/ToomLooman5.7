@@ -4,7 +4,9 @@
 #include "UObject/Object.h"
 #include "RogueAction.generated.h"
 
-UCLASS()
+class URogueActionSystemComponent;
+
+UCLASS(Blueprintable, Abstract)
 class ACTIONROGUELIKE_API URogueAction : public UObject
 {
 	GENERATED_BODY()
@@ -14,9 +16,9 @@ protected:
 	FName ActionName = FName("PrimaryAttack");
 	
 public:
+	URogueActionSystemComponent* GetOwningComponent() const;
 	
-	
-	void StartAction();
+	virtual void StartAction();
 
 	FName GetActionName() const
 	{

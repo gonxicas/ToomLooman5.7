@@ -41,6 +41,8 @@ public:
 	bool IsMaxHealth() const;
 	float GetHealthPercent() const;
 	virtual void InitializeComponent() override;
+	
+	void GrantAction(TSubclassOf<URogueAction> NewActionClass);
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Attributes")
@@ -48,6 +50,9 @@ protected:
 	
 	UPROPERTY()
 	TArray<TObjectPtr<URogueAction>> Actions;
+	
+	UPROPERTY(EditAnywhere, Category = "Actions")
+	TArray<TSubclassOf<URogueAction>> DefaultActions;
 	
 public:
 	

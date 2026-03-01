@@ -11,10 +11,14 @@ URogueActionSystemComponent::URogueActionSystemComponent()
 void URogueActionSystemComponent::InitializeComponent()
 {
 	Super::InitializeComponent();
-	
-	auto NewAction = NewObject<URogueAction>(this, URogueAction::StaticClass());
-	
-	Actions.Add(NewAction);
+
+	for (const TSubclassOf<URogueAction> ActionClass : DefaultActions)
+	{
+		if (ensure(ActionClass))
+		{
+			GrantAction(ActionClass);
+		}
+	}
 }
 
 void URogueActionSystemComponent::StartAction(FName InActionName)
@@ -27,18 +31,25 @@ void URogueActionSystemComponent::StartAction(FName InActionName)
 			return;
 		}
 	}
-	
+
 	UE_LOG(LogTemp, Warning, TEXT("No action found with name %s"), *InActionName.ToString())
+}
+
+void URogueActionSystemComponent::GrantAction(TSubclassOf<URogueAction> NewActionClass)
+{
+	auto NewAction = NewObject<URogueAction>(this, NewActionClass);
+
+	Actions.Add(NewAction);
 }
 
 void URogueActionSystemComponent::ApplyHealthChange(const float InValueAmount)
 {
 	const auto OldHealth = Attributes.Health;
-	
+
 	Attributes.Health = FMath::Clamp(Attributes.Health + InValueAmount, 0.0f, Attributes.MaxHealth);
 
 	UE_LOG(LogTemp, Log, TEXT("New Health: %f, Max Health: %f"), Attributes.Health, Attributes.MaxHealth);
-	
+
 	if (FMath::IsNearlyEqual(Attributes.Health, OldHealth)) return;
 
 	OnHealthChanged.Broadcast(Attributes.Health, OldHealth);
