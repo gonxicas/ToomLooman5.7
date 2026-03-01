@@ -40,6 +40,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> Inputs_Jump;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> Inputs_Sprint;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Death")
 	TObjectPtr<UAnimMontage> DeathMontage;
 	
@@ -53,6 +56,8 @@ protected:
 	TObjectPtr<URogueActionSystemComponent> ActionSystemComponent;
 	
 	void StartAction(FName InActionName);
+	
+	void StopAction(FName InActionName);
 	
 	void Move(const FInputActionValue& InValue);
 

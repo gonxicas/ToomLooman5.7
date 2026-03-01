@@ -38,6 +38,11 @@ void ARoguePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	EnhancedInput->BindAction(Inputs_Move, ETriggerEvent::Triggered, this, &ARoguePlayerCharacter::Move);
 	EnhancedInput->BindAction(Inputs_Look, ETriggerEvent::Triggered, this, &ARoguePlayerCharacter::Look);
 
+	EnhancedInput->BindAction(Inputs_Sprint, ETriggerEvent::Started, this,
+							  &ARoguePlayerCharacter::StartAction, FName("Sprint"));
+	EnhancedInput->BindAction(Inputs_Sprint, ETriggerEvent::Completed, this,
+							  &ARoguePlayerCharacter::StopAction, FName("Sprint"));
+	
 	EnhancedInput->BindAction(Inputs_PrimaryAttack, ETriggerEvent::Triggered, this,
 	                          &ARoguePlayerCharacter::StartAction, FName("PrimaryAttack"));
 	EnhancedInput->BindAction(Inputs_SecondaryAttack, ETriggerEvent::Triggered, this,
@@ -50,6 +55,11 @@ void ARoguePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 void ARoguePlayerCharacter::StartAction(FName InActionName)
 {
 	ActionSystemComponent->StartAction(InActionName);
+}
+
+void ARoguePlayerCharacter::StopAction(FName InActionName)
+{
+	ActionSystemComponent->StopAction(InActionName);
 }
 
 void ARoguePlayerCharacter::Move(const FInputActionValue& InValue)

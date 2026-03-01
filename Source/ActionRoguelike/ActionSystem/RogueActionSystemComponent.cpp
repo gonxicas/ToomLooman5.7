@@ -35,6 +35,20 @@ void URogueActionSystemComponent::StartAction(FName InActionName)
 	UE_LOG(LogTemp, Warning, TEXT("No action found with name %s"), *InActionName.ToString())
 }
 
+void URogueActionSystemComponent::StopAction(FName InActionName)
+{
+	for (URogueAction* Action : Actions)
+	{
+		if (Action->GetActionName() == InActionName)
+		{
+			Action->StopAction();
+			return;
+		}
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("No action found with name %s"), *InActionName.ToString())
+}
+
 void URogueActionSystemComponent::GrantAction(TSubclassOf<URogueAction> NewActionClass)
 {
 	auto NewAction = NewObject<URogueAction>(this, NewActionClass);

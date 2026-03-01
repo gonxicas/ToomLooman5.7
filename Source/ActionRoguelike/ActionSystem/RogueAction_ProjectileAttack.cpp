@@ -20,9 +20,9 @@ URogueAction_ProjectileAttack::URogueAction_ProjectileAttack()
 	MuzzleSocketName = "Muzzle_01";MuzzleSocketName = "Muzzle_01";
 }
 
-void URogueAction_ProjectileAttack::StartAction()
+void URogueAction_ProjectileAttack::StartAction_Implementation()
 {
-	Super::StartAction();
+	Super::StartAction_Implementation();
 
 	const auto ActionComp = GetOwningComponent();
 	const auto Character = CastChecked<ACharacter>( ActionComp->GetOwner());
