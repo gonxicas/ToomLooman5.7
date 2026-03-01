@@ -25,9 +25,12 @@ void URogueActionSystemComponent::StartAction(FName InActionName)
 {
 	for (URogueAction* Action : Actions)
 	{
-		if (Action->GetActionName() == InActionName)
+		if (Action->GetActionName() == InActionName )
 		{
-			Action->StartAction();
+			if (Action->CanStart())
+			{
+				Action->StartAction();
+			}
 			return;
 		}
 	}
