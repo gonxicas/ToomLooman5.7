@@ -24,7 +24,7 @@ void URogueBTService_CheckLowHealth::TickNode(UBehaviorTreeComponent& OwnerComp,
 	const auto ActionSystemComponent =
 		Character->GetComponentByClass<URogueActionSystemComponent>();
 	check(ActionSystemComponent);
-
-	const auto bIsLowHealth = ActionSystemComponent->GetHealthPercent() <= LowHealthFraction;
+	check(false);
+	const auto bIsLowHealth = false;//ActionSystemComponent->GetHealthPercent() <= LowHealthFraction;
 	BBComp->SetValueAsBool(IsLowHealthKey.SelectedKeyName, bIsLowHealth);
 }

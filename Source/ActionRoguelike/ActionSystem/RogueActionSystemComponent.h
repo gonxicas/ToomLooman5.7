@@ -5,6 +5,7 @@
 #include "Components/ActorComponent.h"
 #include "RogueActionSystemComponent.generated.h"
 
+struct FRogueAttribute;
 class URogueAttributeSet;
 class URogueAction;
 
@@ -26,8 +27,8 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnHealthChanged OnHealthChanged;
 	
-	bool IsMaxHealth() const;
-	float GetHealthPercent() const;
+	FRogueAttribute* GetAttribute(FGameplayTag InAttributeTag) const;
+	
 	virtual void InitializeComponent() override;
 	
 	void GrantAction(TSubclassOf<URogueAction> NewActionClass);
@@ -38,6 +39,8 @@ protected:
 	
 	UPROPERTY()
 	TObjectPtr<URogueAttributeSet> Attributes;
+	
+	TMap<FGameplayTag, FRogueAttribute*> CachedAttributes;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Attributes", NoClear)
 	TSubclassOf<URogueAttributeSet> AttributeSetClass;

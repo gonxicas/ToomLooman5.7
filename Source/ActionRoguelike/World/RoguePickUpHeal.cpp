@@ -20,7 +20,8 @@ void ARoguePickUpHeal::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, 
 	const auto ActionSystemComponent =
 		OtherActor->GetComponentByClass<URogueActionSystemComponent>();
 	ensure(ActionSystemComponent);
-	if (ActionSystemComponent == nullptr || ActionSystemComponent->IsMaxHealth()) return;
+	check(false);
+	if (ActionSystemComponent == nullptr || false/*ActionSystemComponent->IsMaxHealth()*/) return;
 
 	ActionSystemComponent->ApplyHealthChange(HealAmount);
 	Super::OnActorOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);

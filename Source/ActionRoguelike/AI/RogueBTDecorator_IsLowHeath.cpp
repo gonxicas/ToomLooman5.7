@@ -13,6 +13,7 @@ bool URogueBTDecorator_IsLowHeath::CalculateRawConditionValue(UBehaviorTreeCompo
 	
 	const auto ActionSystemComponent = Pawn->GetComponentByClass<URogueActionSystemComponent>();
 	if (!ensure(ActionSystemComponent)) return false;
-	
-	return ActionSystemComponent->GetHealthPercent() <= LowHealthFraction;
+	check(false);
+	// return ActionSystemComponent->GetHealthPercent() <= LowHealthFraction;
+	return true;
 }
