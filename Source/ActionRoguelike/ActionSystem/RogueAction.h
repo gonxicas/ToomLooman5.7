@@ -17,6 +17,12 @@ protected:
 	FGameplayTag ActionName;
 	UPROPERTY(EditDefaultsOnly, Category = "Action")
 	float CooldownTime = 0.f;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Action")
+	FGameplayTagContainer GrantTags;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Action")
+	FGameplayTagContainer BlockedTags;
 
 public:
 	UFUNCTION(BlueprintCallable)
