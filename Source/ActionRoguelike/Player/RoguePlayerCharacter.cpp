@@ -8,7 +8,6 @@
 #include "GameFramework/PawnMovementComponent.h"
 
 
-
 ARoguePlayerCharacter::ARoguePlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -28,7 +27,8 @@ void ARoguePlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	ActionSystemComponent->OnHealthChanged.AddDynamic(this, &ARoguePlayerCharacter::OnHealthChanged);
+	FOnAttributeChanged& Event = ActionSystemComponent->GetAttributeListener(SharedGameplayTags::Attribute_Health);
+	Event.AddUObject(this, &ThisClass::OnHealthChanged);
 }
 
 void ARoguePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -41,16 +41,16 @@ void ARoguePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	EnhancedInput->BindAction(Inputs_Look, ETriggerEvent::Triggered, this, &ARoguePlayerCharacter::Look);
 
 	EnhancedInput->BindAction(Inputs_Sprint, ETriggerEvent::Started, this,
-							  &ARoguePlayerCharacter::StartAction, SharedGameplayTags::Action_Sprint.GetTag());
+	                          &ARoguePlayerCharacter::StartAction, SharedGameplayTags::Action_Sprint.GetTag());
 	EnhancedInput->BindAction(Inputs_Sprint, ETriggerEvent::Completed, this,
-							  &ARoguePlayerCharacter::StopAction, SharedGameplayTags::Action_Sprint.GetTag());
-	
+	                          &ARoguePlayerCharacter::StopAction, SharedGameplayTags::Action_Sprint.GetTag());
+
 	EnhancedInput->BindAction(Inputs_PrimaryAttack, ETriggerEvent::Triggered, this,
 	                          &ARoguePlayerCharacter::StartAction, SharedGameplayTags::Action_PrimaryAttack.GetTag());
 	EnhancedInput->BindAction(Inputs_SecondaryAttack, ETriggerEvent::Triggered, this,
-							  &ARoguePlayerCharacter::StartAction, SharedGameplayTags::Action_SecondaryAttack.GetTag());
+	                          &ARoguePlayerCharacter::StartAction, SharedGameplayTags::Action_SecondaryAttack.GetTag());
 	EnhancedInput->BindAction(Inputs_UltimateAttack, ETriggerEvent::Triggered, this,
-							  &ARoguePlayerCharacter::StartAction, SharedGameplayTags::Action_SpecialAttack.GetTag());
+	                          &ARoguePlayerCharacter::StartAction, SharedGameplayTags::Action_SpecialAttack.GetTag());
 	EnhancedInput->BindAction(Inputs_Jump, ETriggerEvent::Triggered, this, &ARoguePlayerCharacter::Jump);
 }
 
@@ -85,7 +85,7 @@ void ARoguePlayerCharacter::Look(const FInputActionInstance& InValue)
 	AddControllerYawInput(InputValue.X);
 }
 
-void ARoguePlayerCharacter::OnHealthChanged(float NewHealth, float OldHealth)
+void ARoguePlayerCharacter::OnHealthChanged(FGameplayTag AttributesTag, float NewHealth, float OldHealth)
 {
 	if (!FMath::IsNearlyZero(NewHealth)) return;
 

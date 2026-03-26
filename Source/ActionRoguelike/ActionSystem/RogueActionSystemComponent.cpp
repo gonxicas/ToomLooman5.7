@@ -2,6 +2,7 @@
 
 #include "RogueAction.h"
 #include "RogueAttributeSet.h"
+#include "SharedGameplayTags.h"
 
 
 URogueActionSystemComponent::URogueActionSystemComponent()
@@ -9,6 +10,11 @@ URogueActionSystemComponent::URogueActionSystemComponent()
 	bWantsInitializeComponent = true;
 
 	AttributeSetClass = URogueAttributeSet::StaticClass();
+}
+
+FOnAttributeChanged& URogueActionSystemComponent::GetAttributeListener(FGameplayTag AttributeTag)
+{
+	return AttributeListeners.FindOrAdd(AttributeTag);
 }
 
 void URogueActionSystemComponent::InitializeComponent()
@@ -34,6 +40,7 @@ void URogueActionSystemComponent::InitializeComponent()
 			GrantAction(ActionClass);
 		}
 	}
+	
 }
 
 void URogueActionSystemComponent::StartAction(FGameplayTag InActionName)
@@ -75,6 +82,8 @@ void URogueActionSystemComponent::GrantAction(TSubclassOf<URogueAction> NewActio
 }
 
 
+
+
 void URogueActionSystemComponent::ApplyAttributeChange(FGameplayTag AttributeTag, const float Delta,
                                                        EAttributeModifyType ModifyType)
 {
@@ -99,6 +108,11 @@ void URogueActionSystemComponent::ApplyAttributeChange(FGameplayTag AttributeTag
 	}
 
 	Attributes->PostAttributeChanged();
+	
+	if (auto Event = AttributeListeners.Find(AttributeTag))
+	{
+		Event->Broadcast(AttributeTag, FoundAttribute->GetValue(), OldValue);
+	}
 
 	
 	UE_LOGFMT(LogTemp, Log, "Attribute {0}, New: {1}, Old: {2}", AttributeTag.ToString(), FoundAttribute->GetValue(),

@@ -63,9 +63,8 @@ protected:
 	void Move(const FInputActionValue& InValue);
 
 	void Look(const FInputActionInstance& InValue);
-
-	UFUNCTION()
-	void OnHealthChanged(float NewHealth, float OldHealth);
+	
+	void OnHealthChanged(FGameplayTag AttributesTag, float NewHealth, float OldHealth);
 public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	
