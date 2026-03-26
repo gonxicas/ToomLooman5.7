@@ -16,4 +16,5 @@ public:
 	static float GetHealthPercent(URogueActionSystemComponent* ActionComp);
 	
 	static bool CanAffordAttribute(const URogueActionSystemComponent* ActionComp, FGameplayTag InAttribute, float AttributeCost);
+	static bool CanAffordAttribute(const URogueActionSystemComponent* ActionComp, TTuple<FGameplayTag, float> InAttribute);
 };

@@ -23,6 +23,10 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Action")
 	FGameplayTagContainer BlockedTags;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Action")
+	TMap<FGameplayTag, float> ActivationCost;
+	
 
 public:
 	UFUNCTION(BlueprintCallable)

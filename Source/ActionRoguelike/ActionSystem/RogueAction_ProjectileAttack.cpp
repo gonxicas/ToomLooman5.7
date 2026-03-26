@@ -3,7 +3,6 @@
 #include "NiagaraFunctionLibrary.h"
 #include "RogueActionSystemComponent.h"
 #include "RogueGameTypes.h"
-#include "Core/RogueGameplayStatics.h"
 
 #include "Kismet/GameplayStatics.h"
 
@@ -29,17 +28,6 @@ void URogueAction_ProjectileAttack::StartAction_Implementation()
 
 	const auto ActionComp = GetOwningComponent();
 	const auto Character = CastChecked<ACharacter>( ActionComp->GetOwner());
-	
-	if (HasAnyCost && !URogueGameplayStatics::CanAffordAttribute(ActionComp, CostType, CostAmount))
-	{
-		StopAction();
-		UE_LOG(LogTemp, Warning, TEXT("Not enough %s to perform action %s"), *CostType.ToString(), *GetNameSafe(this))
-		return;
-	}
-	if (HasAnyCost)
-	{
-		ActionComp->ApplyAttributeChange(CostType, -CostAmount, Base);
-	}
 	
 	Character->PlayAnimMontage(AttackMontage);
 

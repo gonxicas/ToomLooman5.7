@@ -23,3 +23,9 @@ bool URogueGameplayStatics::CanAffordAttribute(const URogueActionSystemComponent
 	auto Attribute = ActionComp->GetAttribute(InAttribute);
 	return Attribute->GetValue() >= AttributeCost;
 }
+
+bool URogueGameplayStatics::CanAffordAttribute(const URogueActionSystemComponent* ActionComp, TTuple<FGameplayTag, float> InAttribute)
+{
+	auto Attribute = ActionComp->GetAttribute(InAttribute.Key);
+	return Attribute->GetValue() >= InAttribute.Value;
+}

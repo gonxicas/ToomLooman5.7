@@ -35,15 +35,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectileAttackc")
 	TObjectPtr<USoundBase> CastingSound;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "ProjectileAttackc")
-	bool HasAnyCost;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "ProjectileAttackc")
-	float CostAmount;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "ProjectileAttackc")
-	FGameplayTag CostType;
-	
 	void AttackTimerElapsed();
 	
 public:

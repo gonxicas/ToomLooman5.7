@@ -1,10 +1,15 @@
 ﻿#include "RogueAction.h"
 #include "RogueActionSystemComponent.h"
+#include "Core/RogueGameplayStatics.h"
 
 
 void URogueAction::StartAction_Implementation()
 {
 	bIsRunning = true;
+	for (auto Cost : ActivationCost)
+	{
+		GetOwningComponent()->ApplyAttributeChange(Cost.Key, -Cost.Value, Modifier);
+	}
 	float WorldTime = GetWorld()->TimeSeconds;
 	UE_LOGFMT(LogTemp, Log, "Started Action {ActionName} - {WorldTime}", ("ActionName", ActionName.ToString()), ("WorldTime", WorldTime));
 	GetOwningComponent()->ActiveGameplayTags.AppendTags(GrantTags);
@@ -32,8 +37,26 @@ bool URogueAction::CanStart() const
 		UE_LOG(LogTemp, Log, TEXT("Cooldown remaining: %f"), GetCooldownTimeRemaining());
 		return false;
 	}
+
+	const auto ActionComp = GetOwningComponent();
+	if (ActionComp->ActiveGameplayTags.HasAny(BlockedTags))
+		return false;
+
+	for (TPair Cost : ActivationCost)
+	{
+		if (!URogueGameplayStatics::CanAffordAttribute(ActionComp, Cost))
+		{
+			UE_LOGFMT(LogTemp, Log, "Not enough {AttributeName}, to activate {ActionName}. "
+				"Have {AvailableAttributeCost} and need {RequiredAttributeValue}",
+				("AttributeName", Cost.Key.ToString()), 
+				("ActionName", ActionName.ToString()),
+				("AvailableAttributeCost", GetOwningComponent()->GetAttributeValue(Cost.Key)),
+				("RequiredAttributeValue", Cost.Value));
+			return false;
+		}
+	}
 	
-	return !GetOwningComponent()->ActiveGameplayTags.HasAny(BlockedTags);
+	return true;
 }
 
 float URogueAction::GetCooldownTimeRemaining() const
