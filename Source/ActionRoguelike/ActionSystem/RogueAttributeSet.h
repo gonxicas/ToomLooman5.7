@@ -66,6 +66,10 @@ class ACTIONROGUELIKE_API URoguePawnAttributeSet : public URogueHealthAttributeS
 public:
 	UPROPERTY(EditAnywhere, Category = "Attributes")
 	FRogueAttribute MoveSpeed;
+	
+	UPROPERTY(EditAnywhere, Category = "Attributes")
+	FRogueAttribute MoveSpeedMultiplier;
+	
 
 	virtual void PostAttributeChanged() override;
 	
@@ -81,6 +85,12 @@ UCLASS()
 class ACTIONROGUELIKE_API URoguePlayerAttributeSet : public URoguePawnAttributeSet
 {
 	GENERATED_BODY()
+	
+public:
+	UPROPERTY(EditAnywhere)
+	FRogueAttribute Rage;
+	
+	URoguePlayerAttributeSet();
 };
 
 UCLASS()
