@@ -12,11 +12,6 @@ URogueActionSystemComponent::URogueActionSystemComponent()
 	AttributeSetClass = URogueAttributeSet::StaticClass();
 }
 
-FOnAttributeChanged& URogueActionSystemComponent::GetAttributeListener(FGameplayTag AttributeTag)
-{
-	return AttributeListeners.FindOrAdd(AttributeTag);
-}
-
 void URogueActionSystemComponent::InitializeComponent()
 {
 	Super::InitializeComponent();
@@ -41,6 +36,13 @@ void URogueActionSystemComponent::InitializeComponent()
 		}
 	}
 	
+}
+
+void URogueActionSystemComponent::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	Attributes->InitializeAttribute();
 }
 
 void URogueActionSystemComponent::StartAction(FGameplayTag InActionName)
@@ -80,8 +82,6 @@ void URogueActionSystemComponent::GrantAction(TSubclassOf<URogueAction> NewActio
 
 	Actions.Add(NewAction);
 }
-
-
 
 
 void URogueActionSystemComponent::ApplyAttributeChange(FGameplayTag AttributeTag, const float Delta,
@@ -124,4 +124,9 @@ FRogueAttribute* URogueActionSystemComponent::GetAttribute(FGameplayTag InAttrib
 	const auto FoundAttribute = *CachedAttributes.Find(InAttributeTag);
 
 	return FoundAttribute;
+}
+
+FOnAttributeChanged& URogueActionSystemComponent::GetAttributeListener(FGameplayTag AttributeTag)
+{
+	return AttributeListeners.FindOrAdd(AttributeTag);
 }
