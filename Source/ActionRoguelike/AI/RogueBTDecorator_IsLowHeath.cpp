@@ -1,6 +1,7 @@
 ﻿#include "RogueBTDecorator_IsLowHeath.h"
 #include "AIController.h"
 #include "ActionSystem/RogueActionSystemComponent.h"
+#include "Core/RogueGameplayStatics.h"
 
 class URogueActionSystemComponent;
 
@@ -13,7 +14,6 @@ bool URogueBTDecorator_IsLowHeath::CalculateRawConditionValue(UBehaviorTreeCompo
 	
 	const auto ActionSystemComponent = Pawn->GetComponentByClass<URogueActionSystemComponent>();
 	if (!ensure(ActionSystemComponent)) return false;
-	check(false);
-	// return ActionSystemComponent->GetHealthPercent() <= LowHealthFraction;
-	return true;
+	
+	return URogueGameplayStatics::GetHealthPercent(ActionSystemComponent) <= LowHealthFraction;
 }

@@ -3,7 +3,9 @@
 
 #include "RoguePickUpHeal.h"
 
+#include "SharedGameplayTags.h"
 #include "ActionSystem/RogueActionSystemComponent.h"
+#include "Core/RogueGameplayStatics.h"
 
 
 ARoguePickUpHeal::ARoguePickUpHeal()
@@ -20,9 +22,8 @@ void ARoguePickUpHeal::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, 
 	const auto ActionSystemComponent =
 		OtherActor->GetComponentByClass<URogueActionSystemComponent>();
 	ensure(ActionSystemComponent);
-	check(false);
-	if (ActionSystemComponent == nullptr || false/*ActionSystemComponent->IsMaxHealth()*/) return;
+	if (ActionSystemComponent == nullptr || URogueGameplayStatics::IsFullHealth(ActionSystemComponent)) return;
 
-	ActionSystemComponent->ApplyHealthChange(HealAmount);
+	ActionSystemComponent->ApplyAttributeChange(SharedGameplayTags::Attribute_Health, HealAmount, Base);
 	Super::OnActorOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 }

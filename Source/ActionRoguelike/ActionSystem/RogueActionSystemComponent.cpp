@@ -7,7 +7,7 @@
 URogueActionSystemComponent::URogueActionSystemComponent()
 {
 	bWantsInitializeComponent = true;
-	
+
 	AttributeSetClass = URogueAttributeSet::StaticClass();
 }
 
@@ -20,13 +20,13 @@ void URogueActionSystemComponent::InitializeComponent()
 	for (TFieldIterator<FStructProperty> PropIt(Attributes->GetClass()); PropIt; ++PropIt)
 	{
 		auto FoundAttribute = PropIt->ContainerPtrToValuePtr<FRogueAttribute>(Attributes);
-		
+
 		FName AttributeTagName("Attribute." + PropIt->GetName());
-		auto AttributeTag =  FGameplayTag::RequestGameplayTag(AttributeTagName);
-		
+		auto AttributeTag = FGameplayTag::RequestGameplayTag(AttributeTagName);
+
 		CachedAttributes.Add(AttributeTag, FoundAttribute);
 	}
-	
+
 	for (const TSubclassOf<URogueAction> ActionClass : DefaultActions)
 	{
 		if (ensure(ActionClass))
@@ -34,15 +34,13 @@ void URogueActionSystemComponent::InitializeComponent()
 			GrantAction(ActionClass);
 		}
 	}
-	
-	
 }
 
 void URogueActionSystemComponent::StartAction(FGameplayTag InActionName)
 {
 	for (URogueAction* Action : Actions)
 	{
-		if (Action->GetActionName() == InActionName )
+		if (Action->GetActionName() == InActionName)
 		{
 			if (Action->CanStart())
 			{
@@ -76,22 +74,40 @@ void URogueActionSystemComponent::GrantAction(TSubclassOf<URogueAction> NewActio
 	Actions.Add(NewAction);
 }
 
-void URogueActionSystemComponent::ApplyHealthChange(const float InValueAmount)
+
+void URogueActionSystemComponent::ApplyAttributeChange(FGameplayTag AttributeTag, const float Delta,
+                                                       EAttributeModifyType ModifyType)
 {
-	/*const auto OldHealth = Attributes.Health;
+	auto FoundAttribute = GetAttribute(AttributeTag);
+	check(FoundAttribute);
 
-	Attributes.Health = FMath::Clamp(Attributes.Health + InValueAmount, 0.0f, Attributes.MaxHealth);
+	auto OldValue = FoundAttribute->GetValue();
 
-	UE_LOG(LogTemp, Log, TEXT("New Health: %f, Max Health: %f"), Attributes.Health, Attributes.MaxHealth);
+	switch (ModifyType)
+	{
+	case Base:
+		FoundAttribute->Base += Delta;
+		break;
+	case Modifier:
+		FoundAttribute->Modifier += Delta;
+		break;
+	case Override:
+		FoundAttribute->Base = Delta;
+		break;
+	default:
+		check(false);
+	}
 
-	if (FMath::IsNearlyEqual(Attributes.Health, OldHealth)) return;
+	Attributes->PostAttributeChanged();
 
-	OnHealthChanged.Broadcast(Attributes.Health, OldHealth);*/
+	
+	UE_LOGFMT(LogTemp, Log, "Attribute {0}, New: {1}, Old: {2}", AttributeTag.ToString(), FoundAttribute->GetValue(),
+	          OldValue);
 }
 
 FRogueAttribute* URogueActionSystemComponent::GetAttribute(FGameplayTag InAttributeTag) const
 {
 	const auto FoundAttribute = *CachedAttributes.Find(InAttributeTag);
-	
+
 	return FoundAttribute;
 }

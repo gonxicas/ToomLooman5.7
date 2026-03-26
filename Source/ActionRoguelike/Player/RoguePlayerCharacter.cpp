@@ -99,9 +99,9 @@ void ARoguePlayerCharacter::OnHealthChanged(float NewHealth, float OldHealth)
 float ARoguePlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
                                         class AController* EventInstigator, AActor* DamageCauser)
 {
-	auto ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	const auto ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	ActionSystemComponent->ApplyHealthChange(-ActualDamage);
+	ActionSystemComponent->ApplyAttributeChange(SharedGameplayTags::Attribute_Health, -ActualDamage, Base);
 
 	return ActualDamage;
 }

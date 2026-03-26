@@ -3,6 +3,7 @@
 #include "RogueGameTypes.h"
 #include "ActionSystem/RogueActionSystemComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Core/RogueGameplayStatics.h"
 
 class URogueActionSystemComponent;
 
@@ -24,7 +25,7 @@ void URogueBTService_CheckLowHealth::TickNode(UBehaviorTreeComponent& OwnerComp,
 	const auto ActionSystemComponent =
 		Character->GetComponentByClass<URogueActionSystemComponent>();
 	check(ActionSystemComponent);
-	check(false);
-	const auto bIsLowHealth = false;//ActionSystemComponent->GetHealthPercent() <= LowHealthFraction;
+	const auto bIsLowHealth = URogueGameplayStatics::GetHealthPercent( ActionSystemComponent) <= LowHealthFraction;
+	
 	BBComp->SetValueAsBool(IsLowHealthKey.SelectedKeyName, bIsLowHealth);
 }

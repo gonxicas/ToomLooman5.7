@@ -5,3 +5,8 @@ URogueHealthAttributeSet::URogueHealthAttributeSet() : Health(FRogueAttribute(10
 {
 }
 
+void URogueHealthAttributeSet::PostAttributeChanged()
+{
+	Health.Base = FMath::Clamp(Health.Base, 0.f, HealthMax.GetValue());
+}
+

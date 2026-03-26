@@ -1,5 +1,6 @@
 ﻿#include "URogueBTTask_Heal.h"
 #include "AIController.h"
+#include "SharedGameplayTags.h"
 #include "ActionSystem/RogueActionSystemComponent.h"
 
 class URogueActionSystemComponent;
@@ -11,6 +12,6 @@ EBTNodeResult::Type UURogueBTTask_Heal::ExecuteTask(UBehaviorTreeComponent& Owne
 
 	if (!ensure(ActionSystem)) return EBTNodeResult::Failed;
 
-	ActionSystem->ApplyHealthChange(HealingAmount);
+	ActionSystem->ApplyAttributeChange(SharedGameplayTags::Attribute_Health, HealingAmount, Base);
 	return EBTNodeResult::Succeeded;
 }
