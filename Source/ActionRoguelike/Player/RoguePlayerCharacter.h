@@ -71,4 +71,8 @@ public:
 	virtual void PostInitializeComponents() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+protected:
+	
+	FTimerHandle OverlayTimerHandle;
 };
