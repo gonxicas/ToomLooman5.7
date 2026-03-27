@@ -19,6 +19,7 @@ ARogueProjectileBlackHole::ARogueProjectileBlackHole()
 	RadialForceComponent->RemoveObjectTypeToAffect(UEngineTypes::ConvertToObjectType(ECC_Pawn));
 	SphereComponent->SetCollisionProfileName(TEXT("BlackHole"));
 	ProjectileMovementComponent->InitialSpeed = 5000.f;
+	InitialLifeSpan = 5.f;
 }
 
 void ARogueProjectileBlackHole::PostInitializeComponents()
@@ -28,19 +29,6 @@ void ARogueProjectileBlackHole::PostInitializeComponents()
 	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ARogueProjectileBlackHole::OnActorOverlap);
 
 	SphereComponent->IgnoreActorWhenMoving(GetInstigator(), true);
-}
-
-void ARogueProjectileBlackHole::BeginPlay()
-{
-	Super::BeginPlay();
-	
-	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ARogueProjectileBlackHole::DestroyBlackHole, DestroyDelayTime);
-}
-
-void ARogueProjectileBlackHole::DestroyBlackHole()
-{
-	Destroy();
 }
 
 void ARogueProjectileBlackHole::Tick(float DeltaTime)

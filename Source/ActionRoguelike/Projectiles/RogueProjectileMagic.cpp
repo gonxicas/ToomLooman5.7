@@ -4,6 +4,7 @@
 
 ARogueProjectileMagic::ARogueProjectileMagic()
 {
+	InitialLifeSpan = 8.f;
 }
 
 void ARogueProjectileMagic::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,

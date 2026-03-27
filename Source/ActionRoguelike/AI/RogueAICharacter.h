@@ -11,12 +11,16 @@ class ACTIONROGUELIKE_API ARogueAICharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	ARogueAICharacter();
+	
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<URogueActionSystemComponent> ActionSystemComponent;
 	
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	
+	virtual void PostInitializeComponents() override;
+	
+	ARogueAICharacter();
 	
 protected:
 	FTimerHandle OverlayTimerHandle;

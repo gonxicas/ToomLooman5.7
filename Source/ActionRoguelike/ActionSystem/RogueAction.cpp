@@ -1,4 +1,6 @@
 ﻿#include "RogueAction.h"
+
+#include "ActionRoguelike.h"
 #include "RogueActionSystemComponent.h"
 #include "Core/RogueGameplayStatics.h"
 
@@ -11,14 +13,7 @@ void URogueAction::StartAction_Implementation()
 		GetOwningComponent()->ApplyAttributeChange(Cost.Key, -Cost.Value, Modifier);
 	}
 	float WorldTime = GetWorld()->TimeSeconds;
-	UE_LOGFMT(LogTemp, Log, "Started Action {ActionName} - {WorldTime}", ("ActionName", ActionName.ToString()), ("WorldTime", WorldTime));
-	GetOwningComponent()->ActiveGameplayTags.AppendTags(GrantTags);
-}
-void URogueAction::StopAction_Implementation()
-{
-	bIsRunning = false;
-	float WorldTime = GetWorld()->TimeSeconds;
-	UE_LOGFMT(LogTemp, Log, "Stopped Action {ActionName} - {WorldTime}", ("ActionName", ActionName.ToString()), ("WorldTime", WorldTime));
+	UE_LOGFMT(LogGame, Log, "Stopped Action {ActionName} - {WorldTime}", ("ActionName", ActionName.ToString()), ("WorldTime", WorldTime));
 
 	CoolDownUntil = GetWorld()->TimeSeconds + CooldownTime;
 	GetOwningComponent()->ActiveGameplayTags.RemoveTags(GrantTags);
@@ -34,7 +29,7 @@ bool URogueAction::CanStart() const
 	
 	if (GetCooldownTimeRemaining() > 0)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Cooldown remaining: %f"), GetCooldownTimeRemaining());
+		UE_LOG(LogGame, Log, TEXT("Cooldown remaining: %f"), GetCooldownTimeRemaining());
 		return false;
 	}
 
@@ -46,7 +41,7 @@ bool URogueAction::CanStart() const
 	{
 		if (!URogueGameplayStatics::CanAffordAttribute(ActionComp, Cost))
 		{
-			UE_LOGFMT(LogTemp, Log, "Not enough {AttributeName}, to activate {ActionName}. "
+			UE_LOGFMT(LogGame, Log, "Not enough {AttributeName}, to activate {ActionName}. "
 				"Have {AvailableAttributeCost} and need {RequiredAttributeValue}",
 				("AttributeName", Cost.Key.ToString()), 
 				("ActionName", ActionName.ToString()),

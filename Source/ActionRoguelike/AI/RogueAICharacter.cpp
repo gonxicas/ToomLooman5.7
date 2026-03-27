@@ -11,8 +11,14 @@ ARogueAICharacter::ARogueAICharacter()
 
 }
 
+void ARogueAICharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	GetMesh()->SetOverlayMaterialMaxDrawDistance(1);
+}
+
 float ARogueAICharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
-	  AController* EventInstigator, AActor* DamageCauser)
+                                    AController* EventInstigator, AActor* DamageCauser)
 {
 	auto ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
@@ -29,5 +35,3 @@ float ARogueAICharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
 	
 	return ActualDamage;
 }
-
-
