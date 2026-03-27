@@ -28,7 +28,7 @@ struct FRogueAttribute
 	float GetValue() const { return Base + Modifier; }
 };
 
-UCLASS()
+UCLASS(EditInlineNew)
 class ACTIONROGUELIKE_API URogueAttributeSet : public UObject
 {
 	GENERATED_BODY()
@@ -36,9 +36,9 @@ class ACTIONROGUELIKE_API URogueAttributeSet : public UObject
 public:
 	URogueActionSystemComponent* GetOwningComponent() const;
 	
-	virtual void InitializeAttribute(){};
+	virtual void InitializeAttribute(){}
 
-	virtual void PostAttributeChanged(){};
+	virtual void PostAttributeChanged(){}
 };
 
 UCLASS()
@@ -47,10 +47,10 @@ class URogueHealthAttributeSet : public URogueAttributeSet
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Health")
 	FRogueAttribute Health;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Health")
 	FRogueAttribute HealthMax;
 
 	virtual void PostAttributeChanged() override;
@@ -64,10 +64,10 @@ class ACTIONROGUELIKE_API URoguePawnAttributeSet : public URogueHealthAttributeS
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, Category = "Attributes")
+	UPROPERTY(EditAnywhere, Category = "MoveSpeed")
 	FRogueAttribute MoveSpeed;
 	
-	UPROPERTY(EditAnywhere, Category = "Attributes")
+	UPROPERTY(EditAnywhere, Category = "MoveSpeed")
 	FRogueAttribute MoveSpeedMultiplier;
 	
 
@@ -87,7 +87,7 @@ class ACTIONROGUELIKE_API URoguePlayerAttributeSet : public URoguePawnAttributeS
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Resources")
 	FRogueAttribute Rage;
 	
 	URoguePlayerAttributeSet();

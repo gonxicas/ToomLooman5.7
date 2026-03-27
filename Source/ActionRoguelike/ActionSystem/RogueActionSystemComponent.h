@@ -25,7 +25,7 @@ DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnAttributeChanged, FGameplayTag/*Attrib
 DECLARE_DYNAMIC_DELEGATE_ThreeParams(FOnAttributeDynamicChanged, FGameplayTag, AttributeTag, float, NewAttributeValue, float ,OldAttributeValue);
 
 
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), HideCategories = (Navigation,Cooking,Tags))
 class ACTIONROGUELIKE_API URogueActionSystemComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -53,19 +53,18 @@ public:
 	
 	virtual void InitializeComponent() override;
 	
+	void SetDefaultAttributeSet(TSubclassOf<URogueAttributeSet> AttributeSetClass);
+	
 	void GrantAction(TSubclassOf<URogueAction> NewActionClass);
 	
 	FGameplayTagContainer ActiveGameplayTags;
 
 protected:
 	
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, Instanced, NoClear, Category = "ActionSystem")
 	TObjectPtr<URogueAttributeSet> Attributes;
 	
 	TMap<FGameplayTag, FRogueAttribute*> CachedAttributes;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Attributes", NoClear)
-	TSubclassOf<URogueAttributeSet> AttributeSetClass;
 	
 	TMap<FGameplayTag, FOnAttributeChanged> AttributeListeners;
 	
@@ -74,7 +73,7 @@ protected:
 	UPROPERTY()
 	TArray<TObjectPtr<URogueAction>> Actions;
 	
-	UPROPERTY(EditAnywhere, Category = "Actions")
+	UPROPERTY(EditAnywhere, Category = "ActionSystem")
 	TArray<TSubclassOf<URogueAction>> DefaultActions;
 	
 public:

@@ -5,6 +5,7 @@
 #include "GameplayTagContainer.h"
 #include "SharedGameplayTags.h"
 #include "ActionSystem/RogueActionSystemComponent.h"
+#include "ActionSystem/RogueAttributeSet.h"
 #include "GameFramework/PawnMovementComponent.h"
 
 
@@ -20,6 +21,7 @@ ARoguePlayerCharacter::ARoguePlayerCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
 	ActionSystemComponent = CreateDefaultSubobject<URogueActionSystemComponent>(TEXT("ActionSystemComp"));
+	ActionSystemComponent->SetDefaultAttributeSet(URoguePlayerAttributeSet::StaticClass());
 }
 
 
