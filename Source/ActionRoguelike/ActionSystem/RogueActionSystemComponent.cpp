@@ -7,18 +7,18 @@
 URogueActionSystemComponent::URogueActionSystemComponent()
 {
 	bWantsInitializeComponent = true;
-	
 }
 
 void URogueActionSystemComponent::InitializeComponent()
 {
 	Super::InitializeComponent();
-	
+
 	if (Attributes == nullptr)
 	{
 		Attributes = NewObject<URogueAttributeSet>(this, URogueAttributeSet::StaticClass());
 		UE_LOG(LogTemp, Warning, TEXT("No default AttributeSet defined. Set using SetDefaultAttributeSet() "
-								"during Actor Construction or assign in Blueprint ActionComponent for %s."), *GetNameSafe(GetOwner()));
+			       "during Actor Construction or assign in Blueprint ActionComponent for %s."),
+		       *GetNameSafe(GetOwner()));
 	}
 
 	for (TFieldIterator<FStructProperty> PropIt(Attributes->GetClass()); PropIt; ++PropIt)
@@ -38,24 +38,22 @@ void URogueActionSystemComponent::InitializeComponent()
 			GrantAction(ActionClass);
 		}
 	}
-	
 }
 
 void URogueActionSystemComponent::SetDefaultAttributeSet(TSubclassOf<URogueAttributeSet> AttributeSetClass)
 {
 	check(!HasBeenInitialized());
-	
+
 	//Only available during constructors or UObjects
 	FObjectInitializer& ObjectInitializer = FObjectInitializer::Get();
 	Attributes = Cast<URogueAttributeSet>(ObjectInitializer.CreateDefaultSubobject(
 		this, TEXT("Attributes"), AttributeSetClass, AttributeSetClass));
-	
 }
 
 void URogueActionSystemComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	Attributes->InitializeAttribute();
 }
 
@@ -82,7 +80,10 @@ void URogueActionSystemComponent::StopAction(FGameplayTag InActionName)
 	{
 		if (Action->GetActionName() == InActionName)
 		{
-			Action->StopAction();
+			if (Action->IsRunning())
+			{
+				Action->StopAction();
+			}
 			return;
 		}
 	}
@@ -122,15 +123,14 @@ void URogueActionSystemComponent::ApplyAttributeChange(FGameplayTag AttributeTag
 	}
 
 	Attributes->PostAttributeChanged();
-	
+
 	if (auto Event = AttributeListeners.Find(AttributeTag))
 	{
 		Event->Broadcast(AttributeTag, FoundAttribute->GetValue(), OldValue);
 	}
-	
+
 	if (TArray<FOnAttributeDynamicChanged>* Events = AttributeDynamicListeners.Find(AttributeTag))
 	{
-		
 		for (int i = Events->Num() - 1; i >= 0; --i)
 		{
 			FOnAttributeDynamicChanged& Event = (*Events)[i];
@@ -143,12 +143,13 @@ void URogueActionSystemComponent::ApplyAttributeChange(FGameplayTag AttributeTag
 		}
 	}
 
-	
+
 	UE_LOGFMT(LogTemp, Log, "Attribute {0}, New: {1}, Old: {2}", AttributeTag.ToString(), FoundAttribute->GetValue(),
 	          OldValue);
 }
 
-void URogueActionSystemComponent::AddDynamicAttributeListener(FOnAttributeDynamicChanged Event, FGameplayTag AttributeTag)
+void URogueActionSystemComponent::AddDynamicAttributeListener(FOnAttributeDynamicChanged Event,
+                                                              FGameplayTag AttributeTag)
 {
 	TArray<FOnAttributeDynamicChanged>& Events = AttributeDynamicListeners.FindOrAdd(AttributeTag);
 	Events.Add(Event);
