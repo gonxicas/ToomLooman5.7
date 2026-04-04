@@ -13,6 +13,13 @@ void URogueAction::StartAction_Implementation()
 		GetOwningComponent()->ApplyAttributeChange(Cost.Key, -Cost.Value, Modifier);
 	}
 	float WorldTime = GetWorld()->TimeSeconds;
+	UE_LOGFMT(LogGame, Log, "Started Action {ActionName} - {WorldTime}", ("ActionName", ActionName.ToString()), ("WorldTime", WorldTime));
+	GetOwningComponent()->ActiveGameplayTags.AppendTags(GrantTags);
+}
+void URogueAction::StopAction_Implementation()
+{
+	bIsRunning = false;
+	float WorldTime = GetWorld()->TimeSeconds;	
 	UE_LOGFMT(LogGame, Log, "Stopped Action {ActionName} - {WorldTime}", ("ActionName", ActionName.ToString()), ("WorldTime", WorldTime));
 
 	CoolDownUntil = GetWorld()->TimeSeconds + CooldownTime;
