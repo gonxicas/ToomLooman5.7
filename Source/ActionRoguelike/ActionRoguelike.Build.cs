@@ -7,16 +7,17 @@ public class ActionRoguelike : ModuleRules
 	public ActionRoguelike(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-	
+
 		PublicIncludePaths.Add("ActionRoguelike");
-		
+
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "EnhancedInput", "Niagara", "AIModule", "GameplayTags", "NavigationSystem" });
+		PrivateDependencyModuleNames.AddRange(new string[]
+			{ "EnhancedInput", "Niagara", "AIModule", "GameplayTags", "NavigationSystem", "DeveloperSettings" });
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
-		
+
 		// Uncomment if you are using online features
 		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
 
