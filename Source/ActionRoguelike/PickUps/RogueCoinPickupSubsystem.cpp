@@ -2,6 +2,7 @@
 
 #include "ActionRoguelike.h"
 #include "EngineUtils.h"
+#include "Components/AudioComponent.h"
 #include "Components/InstancedStaticMeshComponent.h"
 #include "Core/RogueDeveloperSettings.h"
 #include "Player/RoguePlayerCharacter.h"
@@ -12,17 +13,34 @@ void URogueCoinPickupSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 {
 	Super::OnWorldBeginPlay(InWorld);
 
-	WorldISM = NewObject<UInstancedStaticMeshComponent>(&InWorld, NAME_None, RF_Transient);
-	WorldISM->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	WorldISM->RegisterComponentWithWorld(&InWorld);
+	auto World = GetWorld();
 
-	GetDefault<URogueDeveloperSettings>()->CoinPickupMesh.LoadAsync(
+	WorldISM = NewObject<UInstancedStaticMeshComponent>(World, NAME_None, RF_Transient);
+	WorldISM->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	WorldISM->RegisterComponentWithWorld(World);
+
+	const auto DevSettings = GetDefault<URogueDeveloperSettings>();
+	CachedCoinPickupTriggerParamName = DevSettings->CoinPickupTriggerParameter;
+	
+	DevSettings->CoinPickupMesh.LoadAsync(
 		FLoadSoftObjectPathAsyncDelegate::CreateUObject(this, &URogueCoinPickupSubsystem::OnPickupMeshLoadComplete));
+
+	WorldAudioComponent = NewObject<UAudioComponent>(World, NAME_None, RF_Transient);
+	WorldAudioComponent->SetAutoActivate(false);
+	WorldAudioComponent->RegisterComponentWithWorld(World);
+
+	DevSettings->CoinPickupSound.LoadAsync(
+		FLoadSoftObjectPathAsyncDelegate::CreateUObject(this, &URogueCoinPickupSubsystem::OnPickupSoundLoadComplete));
 }
 
 void URogueCoinPickupSubsystem::OnPickupMeshLoadComplete(const FSoftObjectPath& SoftObjectPath, UObject* LoadedObject)
 {
 	WorldISM->SetStaticMesh(Cast<UStaticMesh>(LoadedObject));
+}
+
+void URogueCoinPickupSubsystem::OnPickupSoundLoadComplete(const FSoftObjectPath& SoftObjectPath, UObject* LoadedObject)
+{
+	WorldAudioComponent->SetSound(Cast<USoundBase>(LoadedObject));
 }
 
 void URogueCoinPickupSubsystem::AddCoinPickups(TArray<FVector> NewLocations, TArray<int32> NewAmounts)
@@ -47,6 +65,17 @@ void URogueCoinPickupSubsystem::RemoveCoinPickUp(int32 IndexToRemove)
 
 	WorldISM->RemoveInstanceById(MeshIDs[IndexToRemove]);
 	MeshIDs.RemoveAt(IndexToRemove);
+}
+
+void URogueCoinPickupSubsystem::PlayPickupSound()
+{
+	if (!WorldAudioComponent->IsPlaying())
+	{
+		WorldAudioComponent->Play();
+	}
+	
+	
+	WorldAudioComponent->SetTriggerParameter(CachedCoinPickupTriggerParamName);
 }
 
 void URogueCoinPickupSubsystem::Tick(float DeltaTime)
@@ -80,6 +109,11 @@ void URogueCoinPickupSubsystem::Tick(float DeltaTime)
 		TotalCoinsToGrant += CoinAmounts[CoinIndex];
 
 		RemoveCoinPickUp(CoinIndex);
+	}
+
+	if (TotalCoinsToGrant > 0)
+	{
+		PlayPickupSound();
 	}
 	//@todo: grant coins to player
 
