@@ -72,12 +72,22 @@ void URogueCoinPickupSubsystem::AddCoinPickups(TArray<FVector> NewLocations, TAr
 void URogueCoinPickupSubsystem::RemoveCoinPickUp(int32 IndexToRemove)
 {
 	TRACE_CPUPROFILER_EVENT_SCOPE(CoinPickupSubsystem::RemoveCoinPickUp);
+#if 1
+	CoinLocations.RemoveAtSwap(IndexToRemove, EAllowShrinking::No);
+	CoinAmounts.RemoveAtSwap(IndexToRemove, EAllowShrinking::No);
 
+	WorldISM->RemoveInstanceById(MeshIDs[IndexToRemove]);
+	MeshIDs.RemoveAtSwap(IndexToRemove, EAllowShrinking::No);
+#else
 	CoinLocations.RemoveAt(IndexToRemove);
 	CoinAmounts.RemoveAt(IndexToRemove);
 
 	WorldISM->RemoveInstanceById(MeshIDs[IndexToRemove]);
 	MeshIDs.RemoveAt(IndexToRemove);
+#endif
+	
+	
+	
 	TRACE_COUNTER_SET(CoinInstanceCount, CoinLocations.Num());
 }
 
