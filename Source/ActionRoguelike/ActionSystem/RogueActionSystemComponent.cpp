@@ -3,6 +3,7 @@
 #include "ActionRoguelike.h"
 #include "RogueAction.h"
 #include "RogueAttributeSet.h"
+#include "URogueActionEffect.h"
 
 
 URogueActionSystemComponent::URogueActionSystemComponent()
@@ -97,6 +98,19 @@ void URogueActionSystemComponent::GrantAction(TSubclassOf<URogueAction> NewActio
 	auto NewAction = NewObject<URogueAction>(this, NewActionClass);
 
 	Actions.Add(NewAction);
+	
+	if (NewAction->IsA(UURogueActionEffect::StaticClass()))
+	{
+		ensureMsgf(NewAction->CanStart(), TEXT("Effect %s can not start CanStart returns FALSE. Case not handled."), *NewAction->GetName());
+		
+		NewAction->StartAction();
+	}
+}
+
+void URogueActionSystemComponent::RemoveAction(URogueAction* ActionToRemove)
+{
+	auto RemoveCount = Actions.RemoveSingle(ActionToRemove);
+	ensure(RemoveCount == 1);
 }
 
 
