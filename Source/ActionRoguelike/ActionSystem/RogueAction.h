@@ -52,6 +52,11 @@ public:
 		return ActionName;
 	}
 	
+	virtual bool ImplementsGetWorld() const override
+	{
+		return true;
+	}
+	
 protected:
 	UPROPERTY(Transient)
 	float CoolDownUntil = 0.f;
